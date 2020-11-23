@@ -340,6 +340,26 @@ def get_word_clusters(tweets):
     for cluster_id, title in sorted(zip(classified_examples, job_titles)):
         print(cluster_id, title)
 
+
+def top_tweets(tweets, number=10):
+    tweets = [tweet["tweet"] for tweet in tweets]
+    tweets = sorted(
+        tweets,
+        key=lambda k: (
+            int(k["favorite_count"]) + int(k["retweet_count"]),
+            int(k["favorite_count"]),
+        ),
+        reverse=True,
+    )
+    for i, tweet in enumerate(tweets[:number]):
+        print(
+            f'{i+1}'
+            f'\t{tweet["favorite_count"]}'
+            f'\t{tweet["retweet_count"]}'
+            f'\t{tweet["full_text"]}',
+        )
+
+
 if __name__ == '__main__':
     parser = OptionParser()
     parser.add_option("-j", "--js", dest="js_file",
@@ -370,3 +390,4 @@ if __name__ == '__main__':
     by_hour(tweets, out_dir)
     word_frequency(tweets, out_dir)
     # get_word_clusters(tweets, out_dir)
+    top_tweets(tweets)
